@@ -1,0 +1,58 @@
+{% load i18n sekizai_tags cms_tags %}
+{% load url from future %}
+{% load widget_tweaks %}
+<div class="login-bar">
+	<div class="login-link">
+		<a>LOGIN</a>
+	</div>
+	{% if HAS_PUBLIC_REGISTRATION %}
+	<div class="register-link">
+		<a>&nbsp;| REGISTER</a>
+	</div>
+	{% endif %}
+</div>
+
+<div class="login-popup">
+	<div class="form-header">
+		<div>Login Form:</div>
+		<div class="close">&times;</div>
+	</div>
+	<div class="clearfix"></div>
+	<form class="cms_toolbar-item cms_form-login" method="post" action="{% url 'pages-root' %}?next={{ request.path }}&amp;edit&amp;cms-toolbar-login=1">
+		{% csrf_token %}
+		<label{% if request.toolbar.login_form.username.errors %} class="cms_error"{% endif %}><span>{% trans "Username" %}:</span> <br/>{% render_field request.toolbar.login_form.username %}</label>
+		<label{% if request.toolbar.login_form.password.errors or request.toolbar.login_form.non_field_errors or cms_toolbar_login_error %} class="cms_error"{% endif %}><span>{% trans "Password" %}:</span> <br/>{{ request.toolbar.login_form.password }}</label>
+		<!-- <label><input type="submit" value="Login" /></label> -->
+		<div class="clearfix"></div>
+		<label>
+			<button type="submit" value="Login" class="btn btn-primary btn-sm">Login</button>
+			<a href='{% url "password_reset_recover" %}' id="forgot-password">Forgot Password?</a>
+		</label>
+		<div class="clearfix"></div>
+	</form>
+</div>
+
+<div class="register-popup">
+	<div class="form-header">
+		<div>Registration Form</div>
+		<div class="close">&times;</div>
+	</div>
+	<div class="clearfix"></div>
+	<form class="cms_toolbar-item cms_form-register" method="post" action="/products/accounts/login/?next=/">
+		{% csrf_token %}
+		<label>Email Address:</label><input required name="registration-email" type="email" />
+<!-- 		<label>Confirm Email Address:</label><input type="text" /> -->
+		<br/><br/>
+		<label>Password:</label><input required name="registration-password1" type="password" />
+		<label>Confirm Password:</label><input required name="registration-password2" type="password" />
+		<br/><br/>
+		<label>First Name:</label><input required name="registration-first_name" type="text" />
+		<label>Last Name:</label><input required name="registration-last_name" type="text" />
+
+		<button type="submit" class="btn btn-primary btn-sm" name="registration_submit">Create Account</button>
+		<button type="button" id="close-form" value="Cancel" class="btn btn-default btn-sm">Cancel</button>
+		<!-- <input type="reset" value="Cancel" /> -->
+		
+		<div class="clearfix"></div>
+	</form>
+</div>
